@@ -1,0 +1,11 @@
+added chrome extention to enable http requests for another localhost 
+according https://stackoverflow.com/questions/10883211/deadly-cors-when-http-localhost-is-the-origin
+
+https://chrome.google.com/webstore/detail/allow-control-allow-origi/nlfbmbojpeacfghkpbjhddihlkkiljbi/related
+enable with green button, disable when finish
+
+https://chrome.google.com/webstore/detail/jsonview/chklaanhfefbnpoihckbnefhakgolnmc?hl=en
+json view
+
+https://github.com/angular/angular-cli
+start angular-cli

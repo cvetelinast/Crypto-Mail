@@ -1,0 +1,9 @@
+- in directory cryptoMail open git bash and enter:
+node server.js
+
+http://localhost:3000/api/users contains our database with users
+
+- in directory cryptoMail/client open git bash and enter:
+ng serve
+
+http://localhost:4200/ contains our web application client
