@@ -3,7 +3,7 @@
 A web application that provides sending of encrypted secret messages as emails.
 
 ## Functionalities
-* <i>database: </i> provided by mlab, has the ability to register new user with email, password and username, and keeps encrypted messages for each use;
+* <i>database: </i> provided by mlab, has the ability to register new user with email, password and username, and keeps encrypted messages for each user;
 * <i>user authentication: </i> after registration, user can login with his username and password;
 * <i>encrypted messages in the database</i>
 * <i>chronological order of received messages: </i> user can receive email with notification for having a new message. Also can login and see all received messages decrypted in real time from the database;
@@ -22,5 +22,5 @@ A web application that provides sending of encrypted secret messages as emails.
 ## Tasks
 * Angular front-end - Cvetelina, Elena
 * Node.js API - Elena, Cvetelina
-* encrypting algorithms Elena
+* encrypting algorithms - Elena
 * MongoDB database - Cvetelina
