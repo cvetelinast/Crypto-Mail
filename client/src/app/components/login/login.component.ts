@@ -1,10 +1,55 @@
 import { Component, OnInit } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs';
-//import { Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
+import { JsonpModule, Jsonp } from '@angular/http';
+import { Router, ActivatedRoute } from '@angular/router';
 //import {Http, Headers} from '@angular/http';
 import 'rxjs/add/operator/map';
 
+class SearchItem {
+  constructor(public id: string,
+              public username: string,
+              public password: string,
+              public email: string) {
+  }
+}
+/*
+@Injectable()
+class SearchService {
+  apiRoot: string = 'http://localhost:3000/api/users';
+  results: SearchItem[];
+
+  constructor(private jsonp: Jsonp) {
+    this.results = [];
+  }
+
+  search() {
+    return new Promise((resolve, reject) => {
+      this.results = [];
+      this.jsonp.request( 'http://localhost:3000/api/users')
+          .toPromise()
+          .then(
+              res => { // Success
+                this.results = res.json().results.map(item => {
+                  return new SearchItem(
+                    item.id,
+                    item.username,
+                    item.password,
+                    item.email
+                  );
+                });
+                resolve();
+              },
+              msg => { // Error
+                reject(msg);
+              }
+          );
+    });
+  }
+}
+
+*/
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -16,7 +61,7 @@ export class LoginComponent implements OnInit {
   password: String = '';
   email: String = '';
   users: SearchItem[] = [];
-  constructor(private http: Http) {
+  constructor(private http: Http, private router: Router) {
   }
 
   ngOnInit() {
@@ -51,6 +96,12 @@ export class LoginComponent implements OnInit {
     }
   }
 
+  testRouting(){
+console.log("routing btn");
+this.router.navigate(['home']);
+    //this.router.navigateByUrl['home'];
+  }
+
   login(){
     // this.name = document.getElementsByTagName("input")[0].value;
     // this.password = document.getElementsByTagName("input")[1].value;
@@ -73,7 +124,8 @@ export class LoginComponent implements OnInit {
      console.log(this.password);
     // this.users = this.http.get('http://localhost:3000/api/users')
     // .subscribe((data) => { console.log(JSON.parse(data.text()))});
-    this.search();
+
+   // this.search();
 
   }
   search(): Observable<SearchItem[]> {
@@ -118,12 +170,4 @@ export class LoginComponent implements OnInit {
 //    // return this.http.get('http://localhost:3000/api/users')
 //      //       .map(res=>res.json);
 //   }
-}
-
-class SearchItem {
-  constructor(public id: string,
-              public username: string,
-              public password: string,
-              public email: string) {
-  }
 }

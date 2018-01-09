@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { LoginComponent } from './components/login/login.component';
 
 @Component({
   moduleId: module.id,
@@ -7,5 +8,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'app';
+  title = 'Crypto mail';
 }

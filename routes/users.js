@@ -25,12 +25,13 @@ router.get('/users/:id', function(req, res, next){
 });
 
 // save user
-router.post('/user', function(req, res,next){
+router.post('/users', function(req, res,next){
     var user = req.body;
     if(!user.title){
         res.status(400);
         res.json({"error": "Bad data"});
     } else {
+        
         db.users.save(user, function(err, user){
             if(err){
                 res.send(err);
