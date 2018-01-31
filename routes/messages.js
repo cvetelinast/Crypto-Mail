@@ -2,19 +2,20 @@
 var express = require('express');
 var router = express.Router();
 var mongojs = require('mongojs');
-var db = mongojs('mongodb://user1:user1@ds161346.mlab.com:61346/my_database', ['users']);
+var db = mongojs('mongodb://user1:user1@ds161346.mlab.com:61346/my_database', ['messages']);
 
-// get all users
-router.get('/users', function(req, res, next){
-    db.users.find(function(err, users){
+// get all messages
+router.get('/messages', function(req, res, next){
+    db.messages.find(function(err, messages){
         if(err){
             res.send(err);
         }
-        res.json(users);
+        res.json(messages);
     });
 });
 
 // get single user
+/*
 router.get('/users/:id', function(req, res, next){
     db.users.findOne({_id: mongojs.ObjectId(req.params.id)}, function(err, user){
         if(err){
@@ -23,11 +24,12 @@ router.get('/users/:id', function(req, res, next){
         res.json(user);
     });
 });
+*/
 
-// save user
-router.post('/users', function(req, res, next){
-    var user = req.body;
-    if(!user.username){
+// save message
+router.post('/messages', function(req, res, next){
+    var message = req.body;
+  /*  if(!user.username){
         res.status(400);
         res.json({"error": "No username"});
     } else if (!user.password ){
@@ -43,10 +45,12 @@ router.post('/users', function(req, res, next){
             }
             res.json(user);
         });
-    }
+    }*/
+
 });
 
 // delete user - not used
+/*
 router.delete('/user/:id', function(req, res, next){
     db.users.remove({_id: mongojs.ObjectId(req.params.id)}, function(err, user){
         if(err){
@@ -77,4 +81,5 @@ router.put('/users/:id', function(req, res, next){
         });
     }
 });
+*/
 module.exports = router;
