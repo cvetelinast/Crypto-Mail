@@ -4,6 +4,7 @@ var bodyParser = require('body-parser');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
+var messages = require('./routes/messages');
 
 const port = process.env.PORT || '3000';
 //app.set('port', port);
@@ -24,7 +25,8 @@ app.use(bodyParser.urlencoded({extended: false}));
 
 app.use('/', index);
 app.use('/api', users);
+app.use('/api', messages);
 
 app.listen(port, function(){
-    console.log('Server started ot port: ' +port);
+    console.log('Server started ot port: ' + port);
 });
