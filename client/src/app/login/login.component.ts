@@ -4,86 +4,36 @@ import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { JsonpModule, Jsonp } from '@angular/http';
 import { Router, ActivatedRoute } from '@angular/router';
+import User = require('../classes/user');
 import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/toPromise';
-
-class SearchItem {
-  username: string
-  password: string
-  email: string
-
-  constructor(username: string,
-              password: string,
-              email: string) {
-    this.username = username;
-    this.password = password;
-    this.email = email;
-  }
-}
 
 @Injectable() 
-class SearchService {
-  apiURL:string = 'http://localhost:3000/api/users';
-  results:SearchItem[];
-
-  constructor(private http:Http) { 
-    this.results = [];
-  }
-
-  search(user: SearchItem) {
-    let promise = new Promise((resolve, reject) => {
-      this.http.get(this.apiURL)
-        .toPromise()
-        .then(
-          res => { // Success
-            this.results = JSON.parse(res.text());
-            resolve([user, this.results]);
-            },
-            msg => { // Error
-            reject(msg);
-          }
-        );
-    });
-    return promise;
-  }
-}
-
-
-@Injectable() 
-class PostService {
-  apiURL:string = 'http://localhost:3000/api/users';
+class RequestsService {
+  apiURL: string = 'http://localhost:3000/api/users';
+  results: User[];
   headers: Headers;
   options: RequestOptions;
 
-  constructor(private http: Http) {
+  constructor(private http:Http) { 
+    this.results = [];
+
     this.headers = new Headers({ 'Content-Type': 'application/json', 
-                                 'Accept': 'q=0.8;application/json;q=0.9' });
+                          'Accept': 'q=0.8;application/json;q=0.9' });
     this.options = new RequestOptions({ headers: this.headers });
-}
+  }
 
-postUser(user: SearchItem): Promise<any> {
-  console.log(user);
+  getUsers(): Observable<User[]> {
+    return this.http.get(this.apiURL).map(res => { 
+          return JSON.parse(res.text());
+    });
+  }
+
+postUser(user: User): Observable<any> {
   let body = JSON.stringify(user);
-  console.log(body); 
-  let promise = new Promise((resolve, reject) => {
-    this.http
-    .post(this.apiURL, body, this.options)
-    .toPromise()
-    .then(this.extractData)
-    .catch(this.handleError);
-  });
-  return promise;
+  console.log(body);
+  debugger;
+  return this.http.post(this.apiURL, body, this.options);
 }
-
-  private extractData(res: Response) {
-      let body = res.json();
-      return body || {};
-  }
-
-  private handleError(error: any): Promise<any> {
-      console.error('An error occurred', error);
-      return Promise.reject(error.message || error);
-  }
 
 }
 
@@ -91,17 +41,17 @@ postUser(user: SearchItem): Promise<any> {
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
-  providers: [SearchService, PostService]
+  providers: [RequestsService]
 })
 
 export class LoginComponent implements OnInit {
   username: string = '';
   password: string = '';
   email: string = '';
-  users: SearchItem[] = [];
-  constructor(private usersList: SearchService, 
-              private router: Router, 
-              private postService : PostService) {
+  users: User[] = [];
+  private loading: boolean = false;
+
+  constructor(private requestsService: RequestsService, private router: Router) {
   }
 
   ngOnInit() {
@@ -136,66 +86,54 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  testRouting(){
-    console.log("routing btn");
-    this.router.navigate(['home']);
+  testRouting(user : User){
+    let id = user._id;
+    let email = user.email;
+    let name = user.username;
+    this.router.navigate(['main'], { queryParams: { userId : id , userEmail: email, username: name }, skipLocationChange: true });
   }
 
   login(){
-    let item = new SearchItem(this.username, this.password, this.email);
-    this.usersList.search(item)
-        .then(this.findUser)
-        .then(() => this.testRouting())
-        .catch(error => console.log(error));    
+    let item = new User(this.username, this.password, "", "");
+    this.findUserAndLogIn();
   }
 
   register(){
-    
+
      if(this.password !== document.getElementsByTagName("input")[4].value) {
        console.log("Wrong password");
        return;
      }
-     let item = new SearchItem(this.username, this.password, this.email);
-
-     this.usersList.search(item)
-          .then(this.checkIfUserExistForRegister)
-          .then(this.postUserHelper)
-          .catch(error => console.log(error));
+     let item = new User(this.username, this.password, this.email, "");
+     this.findExistingUserOrRegister();
   }
 
-  postUserHelper(item){
-    this.postService.postUser(item); // TypeError: Cannot read property 
-                                     // 'postService' of undefined
-                                     // at LoginComponent.postUserHelper 
-                                     // (login.component.ts:164)
-  }
-
-  checkIfUserExistForRegister(results){
-    let promise = new Promise((resolve, reject) => {
-      let item = results[0];
-      let usersList = results[1];
-
+findExistingUserOrRegister() {
+    this.loading = true;
+    this.requestsService.getUsers().subscribe( usersList => {
       for(let u of usersList){
-        if(u.username === item.username
-         && u.password === item.password){
-           reject();
-         }
+        if(u.username === this.username
+          || u.password === this.password){
+            return;
+        }
       }
-      resolve(item);
-    });
-    return promise;
+    }); // .unsubscribe();
+    let user = new User(this.username, this.password, this.email, "");
+    this.requestsService.postUser(user).subscribe( data => {
+      this.loading = false;
+    });;
   }
 
-  findUser(results){
-    let item = results[0];
-    let usersList = results[1];
-    for(let u of usersList){
-     if(u.username === item.username
-      && u.password === item.password){
-        this.testRouting(); // this is from another context, 
-                            // we can't access it testRouting() from here
+  findUserAndLogIn() {
+    this.loading = true;
+    this.requestsService.getUsers().subscribe( usersList => {
+      for(let u of usersList){
+        if(u.username === this.username
+          && u.password === this.password){
+            this.testRouting(u);
+        }
       }
-    }
+    }); // .unsubscribe();
   }
-  
+
 }

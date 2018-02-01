@@ -14,72 +14,73 @@ router.get('/messages', function(req, res, next){
     });
 });
 
-// get single user
-/*
-router.get('/users/:id', function(req, res, next){
-    db.users.findOne({_id: mongojs.ObjectId(req.params.id)}, function(err, user){
+// get single user's received messages
+// :id is the id of user in table 'users'
+
+router.get('/messages/:id', function(req, res, next){
+    db.messages.find({toId: req.params.id}, function(err, messages){
         if(err){
             res.send(err);
         }
-        res.json(user);
+        res.json(messages);
     });
 });
-*/
+
 
 // save message
+
 router.post('/messages', function(req, res, next){
-    var message = req.body;
-  /*  if(!user.username){
+    let message = req.body;
+    if(!message.from || !message.fromEmail){
         res.status(400);
-        res.json({"error": "No username"});
-    } else if (!user.password ){
+        res.json({"error": "No information from who."});
+    } else if(!message.to || !message.toEmail || !message.toId){
         res.status(400);
-        res.json({"error": "No password"});
-    } else if (!user.email){
-        res.status(400);
-        res.json({"error": "No email"});   
+        res.json({"error": "No information to who."});
     } else {
-        db.users.save(user, function(err, user){
+        db.messages.save(message, function(err, message){
             if(err){
                 res.send(err);
             }
-            res.json(user);
+            // encrypt message.message and send it
+            res.json(message);
         });
-    }*/
-
+    }
 });
 
-// delete user - not used
-/*
-router.delete('/user/:id', function(req, res, next){
-    db.users.remove({_id: mongojs.ObjectId(req.params.id)}, function(err, user){
+// delete message - not used
+
+router.delete('/messages/:id', function(req, res, next){
+    db.messages.remove({_id: mongojs.ObjectId(req.params.id)}, function(err, message){
         if(err){
             res.send(err);
         }
-        res.json(user);
+        res.json(message);
     });
 });
 
-// update user - not used
-router.put('/users/:id', function(req, res, next){
-    var user = req.body;
-    var updUser = {};
+// update message - not used
+
+router.put('/messages/:id', function(req, res, next){
+    var message = req.body;
+    var updMessage = {};
     if(user.title){
         updUser.title = user.title;
     }
-    if(!updUser){
+    if(!message.from || !message.fromEmail){
         res.status(400);
-        res.json({
-            "error" : "Bad data"
-        });
-    }else {
-        db.users.update({_id: mongojs.ObjectId(req.params.id)}, updTask, {}, function(err, user){
+        res.json({"error": "No information from who."});
+    } else if(!message.to || !message.toEmail || !message.toId){
+        res.status(400);
+        res.json({"error": "No information to who."});
+    } else {
+        db.messages.update({_id: mongojs.ObjectId(req.params.id)}, updTask, {}, function(err, message){
             if(err){
                 res.send(err);
             }
-            res.json(user);
+            res.json(message);
         });
     }
 });
-*/
+
 module.exports = router;

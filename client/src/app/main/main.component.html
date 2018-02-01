@@ -1,26 +1,35 @@
 <div class="container">
 
   <div class="box" id="newMessageBox">
+    <div class="heading">Send new message: </div>
     <label for="from">From: </label>
-    <input type="text" id="fname" name="firstname" placeholder="Your name..">
+    <input type="text" id="fname" name="firstname" placeholder={{email}}>
 
     <label for="to">To: </label>
-    <input type="text" id="lname" name="lastname" placeholder="Your last name..">
+    <input type="text" required [(ngModel)]='recipientEmail' placeholder="Enter recipient's email ...">
 
     <label for="subject">Subject: </label>
-    <textarea id="subject" name="subject" placeholder="Write something.." style="height:200px"></textarea>
+    <textarea id="subject" type="text" [(ngModel)]='description'  placeholder="Enter description ..." style="height:200px"></textarea>
 
     <label for="message">Message: </label>
-    <textarea id="subject" name="subject" placeholder="Write something.." style="height:200px"></textarea>
+    <textarea id="message" type="text" [(ngModel)]='message' placeholder="Write your message here ..." style="height:200px"></textarea>
 
-    <input type="submit" value="Submit">
+    <input type="submit" value="Submit" (click)="sendEmail()">
   </div>
   
   <div  class="box" id="chronology">
 
-    <label for="from">Chronology: </label>
-    <textarea id="subject" name="subject" placeholder="Write something.." style="height:200px"></textarea>
-  
+    <div class="heading">Chronology:</div>
+    <div  *ngFor="let item of emails"> 
+      <div class = "containerMessage">
+          <label for="from">From: </label>
+          <div type="text"> {{ item.from }} </div>
+          <label for="subject">Subject: </label>
+          <div class="containerDescription" > {{ item.description }} </div>
+          <label for="message">Message: </label>
+          <div class="containerSingleMessage" > {{ item.message }} </div>
+        </div>
+    </div>
   </div>
 
 

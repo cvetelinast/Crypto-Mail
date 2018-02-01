@@ -8,5 +8,4 @@ import { LoginComponent } from './login/login.component';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'Crypto mail';
 }
