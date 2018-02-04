@@ -6,29 +6,34 @@
     <input type="text" id="fname" name="firstname" placeholder={{email}}>
 
     <label for="to">To: </label>
-    <input type="text" required [(ngModel)]='recipientEmail' placeholder="Enter recipient's email ...">
+    <div class="popup">
+      <span class="popuptext" id="myPopupName">Enter correct username</span>
+      <input type="text" required [(ngModel)]='recipientName' placeholder="Enter recipient's username">
+    </div>
 
     <label for="subject">Subject: </label>
-    <textarea id="subject" type="text" [(ngModel)]='description'  placeholder="Enter description ..." style="height:200px"></textarea>
-
+    <div class="popup">
+      <span class="popuptext" id="myPopupDescription">Enter description</span>
+      <input id="subject" type="text" [(ngModel)]='description' placeholder="Enter subject">      
+    </div>
+   
     <label for="message">Message: </label>
-    <textarea id="message" type="text" [(ngModel)]='message' placeholder="Write your message here ..." style="height:200px"></textarea>
+    <textarea id="message" type="text" [(ngModel)]='message' placeholder="Write your message here" style="height:180px"></textarea>
 
     <input type="submit" value="Submit" (click)="sendEmail()">
   </div>
-  
-  <div  class="box" id="chronology">
+
+  <div class="box" id="chronology">
 
     <div class="heading">Chronology:</div>
-    <div  *ngFor="let item of emails"> 
-      <div class = "containerMessage">
-          <label for="from">From: </label>
-          <div type="text"> {{ item.from }} </div>
-          <label for="subject">Subject: </label>
-          <div class="containerDescription" > {{ item.description }} </div>
-          <label for="message">Message: </label>
-          <div class="containerSingleMessage" > {{ item.message }} </div>
-        </div>
+    <div class="containerMessagesOnly" *ngFor="let item of emails">
+      <div class="containerMessage">
+        <label for="from">From: {{ item.from }}</label>
+        <label for="subject">Subject: </label>
+        <div class="containerDescription"> {{ item.description }} </div>
+        <label for="message">Message: </label>
+        <div class="containerSingleMessage"> {{ item.message }} </div>
+      </div>
     </div>
   </div>
 

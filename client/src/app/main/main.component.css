@@ -32,8 +32,8 @@ input[type=submit] {
     display: flex;
     box-shadow: 10px 10px 15px grey;
     margin: auto;
-    width: 110px;
     height: 50px;
+    margin-top: 20px;
 }
 
 /* When moving the mouse over the submit button, add a darker green color */
@@ -46,7 +46,7 @@ input[type=submit]:hover {
     border-radius: 5px;
     background-color:#020a1f;;
     padding: 20px;
-    width: 100%;
+    width: 97%;
     overflow:auto;
 }
 
@@ -55,15 +55,25 @@ input[type=submit]:hover {
     background-color: #ffffff;
     padding: 40px;
     overflow: auto;
-    box-shadow: 10px 10px 15px grey;
+    box-shadow: 10px 10px 15px grey;    
+    border-width: 2px;
+    border-color: #707bb5;
+    border-style: solid;
 }
 
-.containerDescription, .containerSingleMessage {
+.containerDescription {
+    border-radius: 5px;    
+    background-color: #a1b0fa9e;
+    padding: 8px;
+    overflow: auto;
+    
+}
+
+.containerSingleMessage {
     border-radius: 5px;    
     background-color: #a1b0fa9e;
     padding: 20px;
     overflow: auto;
-    box-shadow: 10px 10px 15px grey;
     
 }
 
@@ -75,16 +85,89 @@ input[type=submit]:hover {
 #newMessageBox {
     float: left;
     width: 400px;
-    margin: 50px 60px 15px;
+    margin: 50px 65px 15px;
     background-color: rgba(255, 255, 255, 0.685);    
     padding: 35px 35px 35px 35px;
+    height: 650px;
 }
 
 #chronology {
     float: right;
     overflow: auto;
     width: 400px;
-    margin: 50px 60px 15px;
+    margin: 50px 65px 15px;
     background-color: rgba(255, 255, 255, 0.685);    
     padding: 35px 35px 35px 35px;
+    height: 650px;
+}
+
+.box::-webkit-scrollbar {
+    display: block;
+    width: 0.5em;
+    overflow: auto;
+    height: 1em;
+}
+ 
+.box::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    box-shadow: inset  0 0 6px rgba(0,0,0,0.3);
+    border-radius: 10px;
+}
+ 
+.box::-webkit-scrollbar-thumb {
+  background-color: #707bb5;
+  outline: 1px solid slategrey;
+}
+/* Popup for wrong user input: */
+
+/* Popup container */
+.popup {
+    position: relative;
+    cursor: pointer;
+}
+
+/* The actual popup (appears on top) */
+.popup .popuptext {
+    visibility: hidden;
+    width: 160px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 8px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -80px;
+}
+
+/* Popup arrow */
+.popup .popuptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+}
+
+/* Toggle this class when clicking on the popup container (hide and show the popup) */
+.popup .show {
+    visibility: visible;
+    -webkit-animation: fadeIn 1s;
+    animation: fadeIn 1s
+}
+
+/* Add animation (fade in the popup) */
+@-webkit-keyframes fadeIn {
+    from {opacity: 0;} 
+    to {opacity: 1;}
+}
+
+@keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity:1 ;}
 }
