@@ -1,24 +1,44 @@
 <div class="tab">
-    <button class="tablinks" (click)="loginTab()">Login</button>    
+    <button class="tablinks" (click)="loginTab()">Login</button>
     <button class="tablinks" (click)="registerTab()">Register</button>
 </div>
 <div class="menu">
-  <div class = "login" style="visibility: hidden">
-      <label>Username:</label>
-      <input type="text" required [(ngModel)]='username'/>
-      <label>Password:</label>
-      <input type="text" required [(ngModel)]='password'/><br/>
-      <button type="button" id="fancyButton" (click)="login()">Login</button>
-  </div>
-  <div class = "register" style="visibility: hidden">
-      <label>Username:</label>
-      <input type="text" required [(ngModel)]='username'/>
-      <label>Password:</label>
-      <input type="text" required [(ngModel)]='password'/>
-      <label>Repeat password:</label>
-      <input type="text" required/>
-      <label>e-mail:</label>
-      <input type="text" required [(ngModel)]='email'/><br/>
-      <button type="button" id="fancyButton"(click)="register()">Register</button>
-  </div>
+    <div class="login" style="visibility: hidden">
+        <label>Username:</label>
+        <div class="popup">
+            <span class="popuptext" id="myPopupName">Not valid username!</span>
+            <input type="text" required [(ngModel)]='username' />
+        </div>
+        <label>Password:</label>
+        <div class="popup">
+            <span class="popuptext" id="myPopupPass">Enter password!</span>
+            <input type="password" required [(ngModel)]='password' />
+        </div>
+        <br/>
+        <button type="button" id="fancyButton" (click)="login()">Login</button>
+    </div>
+    <div class="register" style="visibility: hidden">
+        <label>Username:</label>
+        <div class="popup">
+            <span class="popuptext" id="myPopupName">Not valid username!</span>
+            <input type="text" required [(ngModel)]='username' />
+        </div>
+        <label>Password:</label>
+        <div class="popup">
+            <span class="popuptext" id="myPopupPass">Enter password!</span>
+            <input type="password" required [(ngModel)]='password' />
+        </div>
+        <label>Repeat password:</label>
+        <div class="popup">
+            <span class="popuptext" id="myPopupPassRepeat">Password not repeated correctly!</span>
+            <input type="password" required [(ngModel)]='repeatPassword'/>
+        </div>
+        <label>e-mail:</label>
+        <div class="popup">
+            <span class="popuptext" id="myPopupEmail">Enter valid email!</span>
+            <input type="text" required [(ngModel)]='email' />
+        </div>
+        <br/>
+        <button type="button" id="fancyButton" (click)="register()">Register</button>
+    </div>
 </div>
