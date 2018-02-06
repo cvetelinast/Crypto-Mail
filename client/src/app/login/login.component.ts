@@ -85,16 +85,21 @@ export class LoginComponent implements OnInit {
     this.loading = true;
     this.requestsService.getUsers().subscribe(usersList => {
       for (let u of usersList) {
-        if (u.username === this.username
-          || u.password === this.password) {
+        if (u.username === this.username) {
+          this.showUsernameValidationPopup();
+          return;
+        }
+        if (u.email === this.email) {
+          this.showEmailValidationPopup();
           return;
         }
       }
+      let user = new User(this.username, this.password, this.email, '');
+      this.requestsService.postUser(user).subscribe(data => {
+        this.loading = false;
+        // todo: show some field for "Registration successful"
+      });
     }); // .unsubscribe();
-    let user = new User(this.username, this.password, this.email, '');
-    this.requestsService.postUser(user).subscribe(data => {
-      this.loading = false;
-    });;
   }
 
   findUserAndLogIn() {
@@ -111,12 +116,15 @@ export class LoginComponent implements OnInit {
 
   validateUsername(): boolean {
     if (this.username.length === 0 || this.username.indexOf(' ') >= 0) {
-      const popupName = document.getElementById('myPopupName');
-      popupName.classList.toggle('show');
-      setTimeout(function () { popupName.classList.toggle('show'); }, 2000);
+      this.showUsernameValidationPopup();
       return false;
     }
     return true;
+  }
+  showUsernameValidationPopup(): void {
+    const popupName = document.getElementById('myPopupName');
+    popupName.classList.toggle('show');
+    setTimeout(function () { popupName.classList.toggle('show'); }, 2000);
   }
   validatePassword(): boolean {
     if (this.password.length === 0) {
@@ -139,12 +147,15 @@ export class LoginComponent implements OnInit {
   validateEmail(): boolean {
     const re = /\S+@\S+\.\S+/;
     if (this.email.length === 0 || !re.test(this.email)) {
-      const popupEmail = document.getElementById('myPopupEmail');
-      popupEmail.classList.toggle('show');
-      setTimeout(function () { popupEmail.classList.toggle('show'); }, 2000);
+      this.showEmailValidationPopup();
       return false;
     }
     return true;
+  }
+  showEmailValidationPopup(): void {
+    const popupEmail = document.getElementById('myPopupEmail');
+    popupEmail.classList.toggle('show');
+    setTimeout(function () { popupEmail.classList.toggle('show'); }, 2000);
   }
 
   loginTab() {
