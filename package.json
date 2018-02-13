@@ -13,6 +13,7 @@
     "ejs": "^2.5.7",
     "express": "^4.16.2",
     "mongojs": "^2.4.1",
-    "nodemailer": "^4.4.2"
+    "nodemailer": "^4.4.2",
+    "nodemon": "^1.14.12"
   }
 }
