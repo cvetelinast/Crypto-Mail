@@ -1,5 +1,8 @@
 <div class="container">
 
+  <div id = "overlay"></div>
+  <div id = "modal">Email was sent successfully.</div>
+
   <div class="box" id="newMessageBox">
     <div class="heading">Send new message: </div>
     <label for="from">From: </label>
@@ -14,9 +17,9 @@
     <label for="subject">Subject: </label>
     <div class="popup">
       <span class="popuptext" id="myPopupDescription">Enter description</span>
-      <input id="subject" type="text" [(ngModel)]='description' placeholder="Enter subject">      
+      <input id="subject" type="text" [(ngModel)]='description' placeholder="Enter subject">
     </div>
-   
+
     <label for="message">Message: </label>
     <textarea id="message" type="text" [(ngModel)]='message' placeholder="Write your message here" style="height:180px"></textarea>
 

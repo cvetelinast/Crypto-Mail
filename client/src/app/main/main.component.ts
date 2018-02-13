@@ -5,6 +5,7 @@ import { Http, Response, RequestOptions, Headers } from '@angular/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import User = require('../classes/user');
+import Cipher = require('../classes/cipher');
 import 'rxjs/add/operator/map';
 
 class Email {
@@ -101,6 +102,8 @@ export class MainComponent implements OnInit {
     this.loading = true;
     this.requestsService.search(this.id).subscribe(data => {
       this.loading = false;
+      let cipher = new Cipher();
+      data.forEach(email => { email.message = cipher.decode(email.message); });
       this.emails = data;
     }); //.unsubscribe(); - does not work with it
   }
@@ -127,11 +130,13 @@ export class MainComponent implements OnInit {
 
   postAndSendEmail() {
     this.loading = true;
+    let cipher = new Cipher();
+    let encodedMessage = cipher.encode(this.message);
     let body = JSON.stringify({
       from: this.username,
       fromEmail: this.email, to: this.recipientName,
       toEmail: this.recipientEmail, toId: this.recipientId,
-      description: this.description, message: this.message
+      description: this.description, message: encodedMessage
     });
     this.requestsService.postEmail(body).subscribe(data => {
       this.loading = false;
@@ -143,7 +148,16 @@ export class MainComponent implements OnInit {
     this.recipientName = '';
     this.description = '';
     this.message = '';
-    console.log("Email was sent.");
+    this.showModalForFinishedSending();
+  }
+
+  showModalForFinishedSending() {
+    var modal = document.getElementById('modal');
+    var overlay = document.getElementById('overlay');
+    modal.classList.add("modal");
+    overlay.classList.add("overlay");
+    setTimeout(function () { modal.classList.remove("modal");
+    overlay.classList.remove("overlay");}, 1500);
   }
 
   validateRecipientName(): boolean {
