@@ -50,9 +50,12 @@ export class LoginComponent implements OnInit {
   repeatPassword: string = '';
   email: string = '';
   users: User[] = [];
+  action: string;
+  
   private loading: boolean = false;
 
   constructor(private requestsService: RequestsService, private router: Router) {
+    this.action = "Login";
   }
 
   ngOnInit() {
@@ -64,6 +67,14 @@ export class LoginComponent implements OnInit {
     let email = user.email;
     let name = user.username;
     this.router.navigate(['main'], { queryParams: { userId: id, userEmail: email, username: name }, skipLocationChange: true });
+  }
+
+  click() {
+    if(this.action === "Login") {
+      this.login();
+    } else if (this.action === "Register") {
+      this.register();
+    }
   }
 
   login() {
@@ -97,6 +108,7 @@ export class LoginComponent implements OnInit {
       let user = new User(this.username, this.password, this.email, '');
       this.requestsService.postUser(user).subscribe(data => {
         this.loading = false;
+        this.showModalForFinishedRegistration();
         // todo: show some field for "Registration successful"
       });
     }); // .unsubscribe();
@@ -159,34 +171,28 @@ export class LoginComponent implements OnInit {
   }
 
   loginTab() {
-    console.log('login');
-    this.hideRegisterTab();
-    const log = document.getElementsByClassName('login');
-    if (log.length > 0) {
-      log[0].setAttribute('style', 'visibility: visible');
-    }
-  }
-  hideLoginTab() {
-    const hidelog = document.getElementsByClassName('login');
-    if (hidelog.length > 0) {
-      hidelog[0].setAttribute('style', 'visibility: hidden');
-    }
-  }
-  registerTab() {
-    console.log('register');
-    this.hideLoginTab();
-    const reg = document.getElementsByClassName('register');
-    if (reg.length > 0) {
-      reg[0].setAttribute('style', 'visibility: visible');
-    }
-  }
-  hideRegisterTab() {
-    const hidereg = document.getElementsByClassName('register');
+    const hidereg = document.getElementsByClassName('hidden');
     if (hidereg.length > 0) {
       hidereg[0].setAttribute('style', 'visibility: hidden');
     }
+    this.action = "Login";
+
+  }
+  registerTab() {
+    const hidelog = document.getElementsByClassName('hidden');
+    if (hidelog.length > 0) {
+      hidelog[0].setAttribute('style', 'visibility: visible');
+    }
+    this.action = "Register";
   }
 
-  // cool sidenavigation: https://www.w3schools.com/howto/howto_css_sidenav_buttons.asp
+  showModalForFinishedRegistration() {
+    var modal = document.getElementById('modal');
+    var overlay = document.getElementById('overlay');
+    modal.classList.add("modal");
+    overlay.classList.add("overlay");
+    setTimeout(function () { modal.classList.remove("modal");
+    overlay.classList.remove("overlay");}, 1500);
+  }
 
 }
