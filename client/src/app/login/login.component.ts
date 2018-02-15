@@ -209,10 +209,8 @@ export class LoginComponent implements OnInit {
     var overlay = document.getElementById('overlay');
     modal.setAttribute('style', 'visibility: visible');
     overlay.setAttribute('style', 'visibility: visible');
-    modal.classList.add("modal");
-    overlay.classList.add("overlay");
-    setTimeout(function () { modal.classList.remove("modal");
-    overlay.classList.remove("overlay");}, 1500);
+    setTimeout(function () { modal.setAttribute('style', 'visibility: hidden');
+    overlay.setAttribute('style', 'visibility: hidden');}, 1500);
   }
 
 }

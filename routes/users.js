@@ -5,9 +5,9 @@ var mongojs = require('mongojs');
 var db = mongojs('mongodb://user1:user1@ds161346.mlab.com:61346/my_database', ['users']);
 
 // get all users
-router.get('/users', function(req, res, next){
-    db.users.find(function(err, users){
-        if(err){
+router.get('/users', function (req, res, next) {
+    db.users.find(function (err, users) {
+        if (err) {
             res.send(err);
         }
         res.json(users);
@@ -15,9 +15,9 @@ router.get('/users', function(req, res, next){
 });
 
 // get single user
-router.get('/users/:id', function(req, res, next){
-    db.users.findOne({_id: mongojs.ObjectId(req.params.id)}, function(err, user){
-        if(err){
+router.get('/users/:id', function (req, res, next) {
+    db.users.findOne({ _id: mongojs.ObjectId(req.params.id) }, function (err, user) {
+        if (err) {
             res.send(err);
         }
         res.json(user);
@@ -25,10 +25,10 @@ router.get('/users/:id', function(req, res, next){
 });
 
 // get single user by username
-router.get('/user/:username/:password', function(req, res, next){
-    console.log("get user with "+req.params.username +" and password " + req.params.password )
-    db.users.findOne({username: req.params.username, password: req.params.password }, function(err, user){
-        if(err){
+router.get('/user/:username/:password', function (req, res, next) {
+    console.log("get user with " + req.params.username + " and password " + req.params.password)
+    db.users.findOne({ username: req.params.username, password: req.params.password }, function (err, user) {
+        if (err) {
             res.send(err);
         }
         res.json(user);
@@ -36,31 +36,34 @@ router.get('/user/:username/:password', function(req, res, next){
 });
 
 // get single user by username or email
-router.get('/users/:username/:email', function(req, res, next){
-    console.log("get user with "+req.params.username +" or email " + req.params.email )
-    db.users.find({ $or:  [{username: req.params.username, email: req.params.email}] }, function(err, user){
-        if(err){
+router.get('/users/:username/:email', function (req, res, next) {
+    db.users.find({ $or: [{ username: req.params.username }, { email: req.params.email }] }, function (err, user) {
+        if (err) {
             res.send(err);
         }
-        res.json(user);
+        if (JSON.stringify(user) === '{}') {
+            res.json(user);
+        } else {
+            res.json("Wrong username or email.");
+        }
     });
 });
 
 // save user
-router.post('/users', function(req, res, next){
+router.post('/users', function (req, res, next) {
     var user = req.body;
-    if(!user.username){
+    if (!user.username) {
         res.status(400);
-        res.json({"error": "No username"});
-    } else if (!user.password ){
+        res.json({ "error": "No username" });
+    } else if (!user.password) {
         res.status(400);
-        res.json({"error": "No password"});
-    } else if (!user.email){
+        res.json({ "error": "No password" });
+    } else if (!user.email) {
         res.status(400);
-        res.json({"error": "No email"});   
+        res.json({ "error": "No email" });
     } else {
-        db.users.save(user, function(err, user){
-            if(err){
+        db.users.save(user, function (err, user) {
+            if (err) {
                 res.send(err);
             }
             res.json(user);
@@ -69,9 +72,9 @@ router.post('/users', function(req, res, next){
 });
 
 // delete user - not used
-router.delete('/user/:id', function(req, res, next){
-    db.users.remove({_id: mongojs.ObjectId(req.params.id)}, function(err, user){
-        if(err){
+router.delete('/user/:id', function (req, res, next) {
+    db.users.remove({ _id: mongojs.ObjectId(req.params.id) }, function (err, user) {
+        if (err) {
             res.send(err);
         }
         res.json(user);
@@ -79,20 +82,20 @@ router.delete('/user/:id', function(req, res, next){
 });
 
 // update user - not used
-router.put('/users/:id', function(req, res, next){
+router.put('/users/:id', function (req, res, next) {
     var user = req.body;
     var updUser = {};
-    if(user.title){
+    if (user.title) {
         updUser.title = user.title;
     }
-    if(!updUser){
+    if (!updUser) {
         res.status(400);
         res.json({
-            "error" : "Bad data"
+            "error": "Bad data"
         });
-    }else {
-        db.users.update({_id: mongojs.ObjectId(req.params.id)}, updTask, {}, function(err, user){
-            if(err){
+    } else {
+        db.users.update({ _id: mongojs.ObjectId(req.params.id) }, updTask, {}, function (err, user) {
+            if (err) {
                 res.send(err);
             }
             res.json(user);

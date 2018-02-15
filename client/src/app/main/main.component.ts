@@ -154,10 +154,10 @@ export class MainComponent implements OnInit {
   showModalForFinishedSending() {
     var modal = document.getElementById('modal');
     var overlay = document.getElementById('overlay');
-    modal.classList.add("modal");
-    overlay.classList.add("overlay");
-    setTimeout(function () { modal.classList.remove("modal");
-    overlay.classList.remove("overlay");}, 1500);
+    modal.setAttribute('style', 'visibility: visible');
+    overlay.setAttribute('style', 'visibility: visible');
+    setTimeout(function () { modal.setAttribute('style', 'visibility: hidden');
+    overlay.setAttribute('style', 'visibility: hidden');}, 1500);
   }
 
   validateRecipientName(): boolean {

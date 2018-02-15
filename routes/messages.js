@@ -72,7 +72,6 @@ router.post('/messages', function (req, res, next) {
 });
 
 // delete message - not used
-
 router.delete('/messages/:id', function (req, res, next) {
     db.messages.remove({ _id: mongojs.ObjectId(req.params.id) }, function (err, message) {
         if (err) {
@@ -83,7 +82,6 @@ router.delete('/messages/:id', function (req, res, next) {
 });
 
 // update message - not used
-
 router.put('/messages/:id', function (req, res, next) {
     var message = req.body;
     var updMessage = {};
