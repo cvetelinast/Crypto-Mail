@@ -4,13 +4,16 @@ var router = express.Router();
 var mongojs = require('mongojs');
 var db = mongojs('mongodb://user1:user1@ds161346.mlab.com:61346/my_database', ['messages']);
 var nodemailer = require('nodemailer');
+var decodeModule = require('./cryptoResources/caesar');
 
+let userMail = decodeModule.decode('fubswrPdloQrwlilfdwru@jpdlo.frp');
+let userPass = decodeModule.decode('fubswrPdloSdvvzrug');
 // send emails:
 var transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-        user: 'cryptoMailNotificator@gmail.com',
-        pass: 'cryptoMailPassword'
+        user: userMail,
+        pass: userPass
     }
 });
 
