@@ -14,13 +14,6 @@ var transporter = nodemailer.createTransport({
     }
 });
 
-var mailOptions = {
-    from: 'youremail@gmail.com',
-    to: 'cvetelinast.96@abv.bg',
-    subject: 'Sending Email using Node.js',
-    text: 'That was easy!'
-};
-
 // get all messages
 router.get('/messages', function (req, res, next) {
     db.messages.find(function (err, messages) {
@@ -57,14 +50,20 @@ router.post('/messages', function (req, res, next) {
             if (err) {
                 res.send(err);
             }
-            transporter.sendMail(mailOptions, function (error, info) {
-                if (error) {
-                    console.log(error);
-                } else {
-                    console.log('Email sent: ' + info.response);
-                }
-            });
             res.json(message);
+        });
+        var mailOptions = {
+            from: 'youremail@gmail.com',
+            to: message.toEmail,
+            subject: 'You have new message from ' + message.from,
+            text: 'Visit your profile in Crypto Mail.'
+        };
+        transporter.sendMail(mailOptions, function (error, info) {
+            if (error) {
+                console.log(error);
+            } else {
+                console.log(message.fromEmail + ' sent email to ' + message.toEmail + ' ' + info.response);
+            }
         });
     }
 });
