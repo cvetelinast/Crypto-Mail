@@ -24,6 +24,28 @@ router.get('/users/:id', function(req, res, next){
     });
 });
 
+// get single user by username
+router.get('/user/:username/:password', function(req, res, next){
+    console.log("get user with "+req.params.username +" and password " + req.params.password )
+    db.users.findOne({username: req.params.username, password: req.params.password }, function(err, user){
+        if(err){
+            res.send(err);
+        }
+        res.json(user);
+    });
+});
+
+// get single user by username or email
+router.get('/users/:username/:email', function(req, res, next){
+    console.log("get user with "+req.params.username +" or email " + req.params.email )
+    db.users.find({ $or:  [{username: req.params.username, email: req.params.email}] }, function(err, user){
+        if(err){
+            res.send(err);
+        }
+        res.json(user);
+    });
+});
+
 // save user
 router.post('/users', function(req, res, next){
     var user = req.body;

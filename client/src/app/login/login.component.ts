@@ -9,7 +9,7 @@ import 'rxjs/add/operator/map';
 
 @Injectable()
 class RequestsService {
-  apiURL: string = 'http://localhost:3000/api/users';
+
   results: User[];
   headers: Headers;
   options: RequestOptions;
@@ -24,15 +24,24 @@ class RequestsService {
     this.options = new RequestOptions({ headers: this.headers });
   }
 
-  getUsers(): Observable<User[]> {
-    return this.http.get(this.apiURL).map(res => {
+  getUser(apiRequest : string): Observable<User> {
+    return this.http.get(apiRequest).map(res => {
+      debugger;
       return JSON.parse(res.text());
     });
   }
 
-  postUser(user: User): Observable<any> {
+  getUsers(apiRequest : string): Observable<User []> {
+    return this.http.get(apiRequest).map(res => {
+      debugger;
+      return JSON.parse(res.text());
+    });
+  }
+
+  postUser(user: User, apiReqest : string): Observable<any> {
     let body = JSON.stringify(user);
-    return this.http.post(this.apiURL, body, this.options);
+    debugger;
+    return this.http.post(apiReqest, body, this.options);
   }
 
 }
@@ -45,20 +54,24 @@ class RequestsService {
 })
 
 export class LoginComponent implements OnInit {
+  
   username: string = '';
   password: string = '';
   repeatPassword: string = '';
   email: string = '';
-  users: User[] = [];
+ // users: User[] = [];
   action: string;
+  apiPost: string = 'http://localhost:3000/api/users';
+  apiGet: string = '';
+  apiGetToPost: string = '';
   
   private loading: boolean = false;
 
   constructor(private requestsService: RequestsService, private router: Router) {
-    this.action = "Login";
   }
 
   ngOnInit() {
+    this.action = "Login";
     this.loginTab();
   }
 
@@ -94,7 +107,11 @@ export class LoginComponent implements OnInit {
 
   findExistingUserOrRegister() {
     this.loading = true;
-    this.requestsService.getUsers().subscribe(usersList => {
+    debugger;
+    this.apiGetToPost = `http://localhost:3000/api/users/${this.username}/${this.email}`;
+    this.requestsService.getUsers(this.apiGetToPost).subscribe(usersList => {
+      debugger;
+      // if usersList !== null -> ne trqbva da go logvame
       for (let u of usersList) {
         if (u.username === this.username) {
           this.showUsernameValidationPopup();
@@ -106,24 +123,25 @@ export class LoginComponent implements OnInit {
         }
       }
       let user = new User(this.username, this.password, this.email, '');
-      this.requestsService.postUser(user).subscribe(data => {
+      debugger;
+      this.requestsService.postUser(user, this.apiPost ).subscribe(data => {
         this.loading = false;
         this.showModalForFinishedRegistration();
-        // todo: show some field for "Registration successful"
       });
     }); // .unsubscribe();
   }
 
   findUserAndLogIn() {
     this.loading = true;
-    this.requestsService.getUsers().subscribe(usersList => {
-      for (let u of usersList) {
-        if (u.username === this.username
-          && u.password === this.password) {
-          this.navigateToMainComponent(u);
+    this.apiGet = `http://localhost:3000/api/user/${this.username}/${this.password}`;
+    this.requestsService.getUser(this.apiGet).subscribe(user => {
+      if(user !== null) {
+        debugger;
+      //  let user = new User(user.username, user.password, user.email, user._id)
+          this.navigateToMainComponent(user);
         }
       }
-    }); // .unsubscribe();
+    ); // .unsubscribe();
   }
 
   validateUsername(): boolean {
@@ -189,6 +207,8 @@ export class LoginComponent implements OnInit {
   showModalForFinishedRegistration() {
     var modal = document.getElementById('modal');
     var overlay = document.getElementById('overlay');
+    modal.setAttribute('style', 'visibility: visible');
+    overlay.setAttribute('style', 'visibility: visible');
     modal.classList.add("modal");
     overlay.classList.add("overlay");
     setTimeout(function () { modal.classList.remove("modal");
