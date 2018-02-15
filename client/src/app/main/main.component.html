@@ -2,11 +2,12 @@
 
   <div id = "overlay"></div>
   <div id = "modal">Email was sent successfully.</div>
+  <input type="submit" id="logout" value="Logout" (click)="logout()">
 
   <div class="box" id="newMessageBox">
     <div class="heading">Send new message: </div>
     <label for="from">From: </label>
-    <input type="text" id="fname" name="firstname" placeholder={{email}}>
+    <input type="text" id="fname" name="firstname" placeholder={{email}} readonly>
 
     <label for="to">To: </label>
     <div class="popup">
@@ -39,7 +40,4 @@
       </div>
     </div>
   </div>
-
-
-
 </div>

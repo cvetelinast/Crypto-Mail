@@ -1,4 +1,3 @@
-// api: 
 var express = require('express');
 var router = express.Router();
 var mongojs = require('mongojs');
@@ -8,7 +7,6 @@ var decodeModule = require('./cryptoResources/caesar');
 
 let userMail = decodeModule.decode('fubswrPdloQrwlilfdwru@jpdlo.frp');
 let userPass = decodeModule.decode('fubswrPdloSdvvzrug');
-// send emails:
 var transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -71,7 +69,7 @@ router.post('/messages', function (req, res, next) {
     }
 });
 
-// delete message - not used
+// delete message
 router.delete('/messages/:id', function (req, res, next) {
     db.messages.remove({ _id: mongojs.ObjectId(req.params.id) }, function (err, message) {
         if (err) {
@@ -81,7 +79,7 @@ router.delete('/messages/:id', function (req, res, next) {
     });
 });
 
-// update message - not used
+// update message
 router.put('/messages/:id', function (req, res, next) {
     var message = req.body;
     var updMessage = {};

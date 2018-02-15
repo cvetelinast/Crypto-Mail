@@ -7,7 +7,6 @@ var users = require('./routes/users');
 var messages = require('./routes/messages');
 
 const port = process.env.PORT || '3000';
-//app.set('port', port);
 
 var app = express();
 

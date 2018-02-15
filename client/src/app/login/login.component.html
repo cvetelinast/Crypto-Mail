@@ -1,3 +1,9 @@
+<div>
+    <h1>
+        Welcome to Crypto Mail
+    </h1>
+    <h3>A web application that provides sending of encrypted secret messages.</h3>
+</div>
 <div class='body'>
     <div id='overlay'></div>
     <div id='modal'>Registration successful.</div>
@@ -17,7 +23,7 @@
                     <label>Password:</label>
                     <div class='popup'>
                         <span class='popuptext' id='myPopupPass'>Enter password</span>
-                        <input type='password' required [(ngModel)]='password' />
+                        <input type='password' required [(ngModel)]='password' (keyup.enter)='click()'/>
                     </div>
                     <br/>
                     <div class='hidden' style='visibility: hidden'>

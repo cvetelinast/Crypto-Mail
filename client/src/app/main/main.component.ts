@@ -6,25 +6,13 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import User = require('../classes/user');
 import Cipher = require('../classes/cipher');
+import Email = require('../classes/email');
 import 'rxjs/add/operator/map';
 
-class Email {
-  from: string = '';
-  description: string = '';
-  message: string = '';
-
-  constructor(from: string, description: string, message: string) {
-    this.from = from;
-    this.description = description;
-    this.message = message
-  }
-
-}
 @Injectable()
 class RequestsService {
   messagesURL: string = 'http://localhost:3000/api/messages';
-  usersURL: string = 'http://localhost:3000/api/users';
-
+  usersURL: string = 'http://localhost:3000/api/users/username';
   emails: Email[];
   headers: Headers;
   options: RequestOptions;
@@ -45,8 +33,8 @@ class RequestsService {
     });
   }
 
-  getUsers(): Observable<User[]> {
-    return this.http.get(this.usersURL).map(res => {
+  getUserByUsername(username: string): Observable<User> {
+    return this.http.get(this.usersURL + '/' + username).map(res => {
       return JSON.parse(res.text());
     });
   }
@@ -81,7 +69,7 @@ export class MainComponent implements OnInit {
   private loading: boolean = false;
   private emails: Email[];
 
-  constructor(private route: ActivatedRoute, private requestsService: RequestsService) {
+  constructor(private route: ActivatedRoute, private requestsService: RequestsService, private router: Router) {
 
     this.id = this.route.snapshot.queryParams['userId'];
     this.email = this.route.snapshot.queryParams['userEmail'];
@@ -105,24 +93,19 @@ export class MainComponent implements OnInit {
       let cipher = new Cipher();
       data.forEach(email => { email.message = cipher.decode(email.message); });
       this.emails = data;
-    }); //.unsubscribe(); - does not work with it
+    }); //.unsubscribe();
   }
 
   findUser() {
     this.loading = true;
-    this.requestsService.getUsers().subscribe(usersList => {
-      let userExists = false;
-      for (let u of usersList) {
-        if (u.username === this.recipientName) {
-          this.recipientEmail = u.email;
-          this.recipientId = u._id;
-          userExists = true;
-        }
-      }
-      if (!userExists) {
+    this.requestsService.getUserByUsername(this.recipientName).subscribe(user => {
+      debugger;
+      if (user == null) {
         this.showPopup();
         return;
       }
+      this.recipientEmail = user.email;
+      this.recipientId = user._id;
       this.loading = false;
       this.postAndSendEmail();
     }); // .unsubscribe();
@@ -156,8 +139,10 @@ export class MainComponent implements OnInit {
     var overlay = document.getElementById('overlay');
     modal.setAttribute('style', 'visibility: visible');
     overlay.setAttribute('style', 'visibility: visible');
-    setTimeout(function () { modal.setAttribute('style', 'visibility: hidden');
-    overlay.setAttribute('style', 'visibility: hidden');}, 1500);
+    setTimeout(function () {
+      modal.setAttribute('style', 'visibility: hidden');
+      overlay.setAttribute('style', 'visibility: hidden');
+    }, 1500);
   }
 
   validateRecipientName(): boolean {
@@ -182,6 +167,9 @@ export class MainComponent implements OnInit {
       return false;
     }
     return true;
+  }
+  logout(){
+    this.router.navigate(['login']);
   }
 
 }

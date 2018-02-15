@@ -9,14 +9,10 @@ import 'rxjs/add/operator/map';
 
 @Injectable()
 class RequestsService {
-
-  results: User[];
   headers: Headers;
   options: RequestOptions;
 
   constructor(private http: Http) {
-    this.results = [];
-
     this.headers = new Headers({
       'Content-Type': 'application/json',
       'Accept': 'q=0.8;application/json;q=0.9'
@@ -24,23 +20,20 @@ class RequestsService {
     this.options = new RequestOptions({ headers: this.headers });
   }
 
-  getUser(apiRequest : string): Observable<User> {
+  getUser(apiRequest: string): Observable<User> {
     return this.http.get(apiRequest).map(res => {
-      debugger;
       return JSON.parse(res.text());
     });
   }
 
-  getUsers(apiRequest : string): Observable<User []> {
+  getUsers(apiRequest: string): Observable<any> {
     return this.http.get(apiRequest).map(res => {
-      debugger;
       return JSON.parse(res.text());
     });
   }
 
-  postUser(user: User, apiReqest : string): Observable<any> {
+  postUser(user: User, apiReqest: string): Observable<any> {
     let body = JSON.stringify(user);
-    debugger;
     return this.http.post(apiReqest, body, this.options);
   }
 
@@ -54,17 +47,15 @@ class RequestsService {
 })
 
 export class LoginComponent implements OnInit {
-  
+
   username: string = '';
   password: string = '';
   repeatPassword: string = '';
   email: string = '';
- // users: User[] = [];
   action: string;
   apiPost: string = 'http://localhost:3000/api/users';
   apiGet: string = '';
   apiGetToPost: string = '';
-  
   private loading: boolean = false;
 
   constructor(private requestsService: RequestsService, private router: Router) {
@@ -83,7 +74,7 @@ export class LoginComponent implements OnInit {
   }
 
   click() {
-    if(this.action === "Login") {
+    if (this.action === "Login") {
       this.login();
     } else if (this.action === "Register") {
       this.register();
@@ -107,24 +98,15 @@ export class LoginComponent implements OnInit {
 
   findExistingUserOrRegister() {
     this.loading = true;
-    debugger;
     this.apiGetToPost = `http://localhost:3000/api/users/${this.username}/${this.email}`;
-    this.requestsService.getUsers(this.apiGetToPost).subscribe(usersList => {
-      debugger;
-      // if usersList !== null -> ne trqbva da go logvame
-      for (let u of usersList) {
-        if (u.username === this.username) {
-          this.showUsernameValidationPopup();
-          return;
-        }
-        if (u.email === this.email) {
-          this.showEmailValidationPopup();
-          return;
-        }
+    this.requestsService.getUsers(this.apiGetToPost).subscribe(response => {
+      if (response.length > 0) {
+        this.showUsernameValidationPopup();
+        this.showEmailValidationPopup();
+        return;
       }
       let user = new User(this.username, this.password, this.email, '');
-      debugger;
-      this.requestsService.postUser(user, this.apiPost ).subscribe(data => {
+      this.requestsService.postUser(user, this.apiPost).subscribe(data => {
         this.loading = false;
         this.showModalForFinishedRegistration();
       });
@@ -135,12 +117,10 @@ export class LoginComponent implements OnInit {
     this.loading = true;
     this.apiGet = `http://localhost:3000/api/user/${this.username}/${this.password}`;
     this.requestsService.getUser(this.apiGet).subscribe(user => {
-      if(user !== null) {
-        debugger;
-      //  let user = new User(user.username, user.password, user.email, user._id)
-          this.navigateToMainComponent(user);
-        }
+      if (user !== null) {
+        this.navigateToMainComponent(user);
       }
+    }
     ); // .unsubscribe();
   }
 
@@ -209,8 +189,10 @@ export class LoginComponent implements OnInit {
     var overlay = document.getElementById('overlay');
     modal.setAttribute('style', 'visibility: visible');
     overlay.setAttribute('style', 'visibility: visible');
-    setTimeout(function () { modal.setAttribute('style', 'visibility: hidden');
-    overlay.setAttribute('style', 'visibility: hidden');}, 1500);
+    setTimeout(function () {
+      modal.setAttribute('style', 'visibility: hidden');
+      overlay.setAttribute('style', 'visibility: hidden');
+    }, 1500);
   }
 
 }

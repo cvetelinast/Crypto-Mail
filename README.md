@@ -1,6 +1,6 @@
 # CryptoMail
 
-A web application that provides sending of encrypted secret messages as emails.
+A web application that provides sending of encrypted secret messages.
 
 ## Functionalities
 * <i>database: </i> provided by mlab, has the ability to register new user with email, password and username, and keeps encrypted messages for each user;

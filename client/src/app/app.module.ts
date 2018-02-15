@@ -8,7 +8,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
-import { HomeComponent } from './home/home.component';
 import { AppRoutingModule } from './app-routing.module';
 import { MainComponent } from './main/main.component';
 
@@ -17,7 +16,6 @@ import { MainComponent } from './main/main.component';
   declarations: [
     AppComponent,
     LoginComponent,
-    HomeComponent,
     MainComponent
   ],
   imports: [
