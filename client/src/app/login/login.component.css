@@ -151,7 +151,6 @@ input[type=submit]:hover {
 }
 
 .modal{
-    visibility: hidden;
     width: 300px;
     height: 200px;
     line-height: 200px;
@@ -166,7 +165,6 @@ input[type=submit]:hover {
     z-index: 11; /* 1px higher than the overlay layer */
 }
 .overlay {
-    visibility: hidden;
     position: absolute;
     top: 0;
     left: 0;

@@ -119,6 +119,8 @@ export class LoginComponent implements OnInit {
     this.requestsService.getUser(this.apiGet).subscribe(user => {
       if (user !== null) {
         this.navigateToMainComponent(user);
+      } else {
+        this.showUsernameValidationPopup();
       }
     }
     ); // .unsubscribe();
@@ -189,9 +191,11 @@ export class LoginComponent implements OnInit {
     var overlay = document.getElementById('overlay');
     modal.setAttribute('style', 'visibility: visible');
     overlay.setAttribute('style', 'visibility: visible');
+    modal.classList.add("modal");
+    overlay.classList.add("overlay");
     setTimeout(function () {
-      modal.setAttribute('style', 'visibility: hidden');
-      overlay.setAttribute('style', 'visibility: hidden');
+      modal.classList.remove("modal");
+      overlay.classList.remove("overlay");
     }, 1500);
   }
 
