@@ -5,6 +5,7 @@ import { Injectable } from '@angular/core';
 import { JsonpModule, Jsonp } from '@angular/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import User = require('../classes/user');
+import Cipher = require('../classes/cipher');
 import 'rxjs/add/operator/map';
 
 @Injectable()
@@ -83,7 +84,9 @@ export class LoginComponent implements OnInit {
 
   login() {
     if (this.validateUsername() && this.validatePassword()) {
-      let item = new User(this.username, this.password, '', '');
+      let cipher = new Cipher();
+      let pass = cipher.encode(this.password);
+      let item = new User(this.username, pass, '', '');
       this.findUserAndLogIn();
     }
   }
@@ -105,7 +108,9 @@ export class LoginComponent implements OnInit {
         this.showEmailValidationPopup();
         return;
       }
-      let user = new User(this.username, this.password, this.email, '');
+      let cipher = new Cipher();
+      let pass = cipher.encode(this.password);
+      let user = new User(this.username, pass, this.email, '');
       this.requestsService.postUser(user, this.apiPost).subscribe(data => {
         this.loading = false;
         this.showModalForFinishedRegistration();
@@ -115,7 +120,9 @@ export class LoginComponent implements OnInit {
 
   findUserAndLogIn() {
     this.loading = true;
-    this.apiGet = `http://localhost:3000/api/user/${this.username}/${this.password}`;
+    let cipher = new Cipher();
+    let pass = cipher.encode(this.password);
+    this.apiGet = `http://localhost:3000/api/user/${this.username}/${pass}`;
     this.requestsService.getUser(this.apiGet).subscribe(user => {
       if (user !== null) {
         this.navigateToMainComponent(user);
