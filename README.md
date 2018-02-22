@@ -24,3 +24,6 @@ A web application that provides sending of encrypted secret messages.
 * Node.js API - Elena, Cvetelina
 * encrypting algorithms - Elena
 * MongoDB database - Cvetelina
+
+## Screenshot
+![alt text](https://github.com/cvetelinast/Crypto-Mail/blob/master/demo.png)
